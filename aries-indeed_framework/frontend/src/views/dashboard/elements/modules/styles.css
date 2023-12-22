@@ -1,0 +1,86 @@
+#optimizationSlider.slider-horizontal{
+    width:calc(100% - 60px); /* sample value - set it as you like*/
+  }
+
+#optimizationSlider {
+    margin: 0 30px 0 30px
+}
+
+.popover {
+  text-align: justify;
+}
+
+.popover-header {
+  background: #23272a;
+  color: #d5eadb;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.popover-body {
+  font-size: 13px;
+  background: #d5eadb;
+}
+
+#popover.h5 {
+  margin: 0px;
+  font-size: 1.3em
+}
+
+#popover.p {
+  margin: 10px 0px
+}
+
+.card{
+  background: #ededee;
+  margin: 15px;
+}
+
+.card-title {
+  color: #3c8761;
+  margin: 10px;
+  text-align: left;
+}
+
+.emission-grid-container {
+  display: grid;
+  row-gap: 30px;
+  column-gap: 15px;
+  grid-template-areas:
+          "chart chart chart chart"
+          "table table button1 button2";
+  grid-template-columns: 1fr fit-content(80%);
+}
+
+.button {
+  border-color: #23272a;
+  background: #d5eadb;
+  font-size: 14px;
+  color: black;
+  text-align: center;
+  font-weight: bold;
+  width: 210px;
+  height: 30px;
+  max-width: 80%;
+  max-height: 50%;
+}
+
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+table > thead {
+  color: #3c8761;
+  text-align: left;
+}
+
+table > tbody {
+  text-align: right;
+}
+
+.value {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: right;
+}

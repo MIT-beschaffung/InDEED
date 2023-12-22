@@ -1,0 +1,6 @@
+{
+  "ledger_url": "0.0.0.0",
+  "agent_url": "0.0.0.0",
+  "base_url": "0.0.0.0",
+  "log_level": "debug"
+}

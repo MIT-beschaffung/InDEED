@@ -1,0 +1,88 @@
+#!/bin/sh
+set -a
+source ../backend/.env
+set +a
+
+echo "Writing test data and retrieving id"
+id1=$(curl -s -X 'POST' \
+  'https://indeed-energy.de/liqwotec/logData' \
+  -H 'accept: */*' \
+  -H 'api_key: ${API_KEY}' \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "dev_id": 'LF/S4_raw',
+        "tstamp": '"$(date +"%s")"',
+        "current_value": '12345'
+      }'# | jq ._id)
+echo "Got id: $id1"
+
+echo ""
+
+echo "Writing another test data and retrieving id"
+id2=$(curl -s -X 'POST' \
+  'https://indeed-energy.de/liqwotec/logData' \
+  -H 'accept: */*' \
+  -H 'api_key: ${API_KEY}' \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "dev_id": 'LG/S5_raw',
+        "tstamp": '"$(date +"%s")"',
+        "current_value": '67890'
+      }'# | jq ._id)
+echo "Got id: $id2"
+
+echo ""
+
+echo "Notarize the two ids"
+proofs=$(curl -s -X 'POST' \
+  'https://indeed-energy.de/notarize/notarizeIds' \
+  -H 'accept: */*' \
+  -H 'api_key: ${API_KEY}' \
+  -H 'Content-Type: application/json' \
+  -d '['$id1', '$id2']' | jq)
+echo "Received proofs "
+# echo $proofs
+
+echo ""
+echo ""
+
+proof1=$(echo $proofs | jq -r .[0])
+proof1string=$(echo $proof1 | jq tostring)
+echo "Proof1: "
+echo $proof1 | jq
+
+echo ""
+
+proof2=$(echo $proofs | jq -r .[1])
+proof2string=$(echo $proof2 | jq tostring)
+echo "Proof2: "
+echo $proof2 | jq
+
+echo ""
+
+echo "Verifying proof for data"
+echo "Data: "
+echo $proof1 | jq .data
+echo ""
+echo "Proof verification result: "
+curl -s -X 'POST' \
+  'https://indeed-energy.de/notarize/verifyNotarizationProof' \
+  -H 'accept: */*' \
+  -H 'api_key: ${API_KEY}' \
+  -H 'Content-Type: application/json' \
+  -d "$proof1" | jq
+
+
+echo ""
+
+echo "Verifying proof for data"
+echo "Data: "
+echo $proof2 | jq .data
+echo ""
+echo "Proof verification result: "
+curl -s -X 'POST' \
+  'https://indeed-energy.de/notarize/verifyNotarizationProof' \
+  -H 'accept: */*' \
+  -H 'api_key: ${API_KEY}' \
+  -H 'Content-Type: application/json' \
+  -d "$proof2" | jq

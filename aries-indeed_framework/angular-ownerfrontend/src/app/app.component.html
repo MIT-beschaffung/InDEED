@@ -1,0 +1,37 @@
+<nav class="justify-content-end navbar navbar-expand navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"><img height="64px" src="assets/InDEED_Logo.svg" alt="logo"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="container" id="navbarSupportedContent" data-target=".navbar-collapse">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!--
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/submitJson">Log Data</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/AggregateData">Aggregate Data</a>
+        </li>
+        -->
+        <li class="nav-item m-3" >
+          <a class="nav-link" id="NotarizeDataNavItem" routerLink="/NotarizeData">Notarize Data</a>
+        </li>
+        <!--
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/SearchByID">Search</a>
+        </li>
+        -->
+        <li class="nav-item m-3" >
+          <a class="nav-link" id="VerifyDataNavItem" routerLink="/Verify">Verify</a>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+

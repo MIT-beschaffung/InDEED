@@ -1,0 +1,88 @@
+.consumption-grid-container {
+    display: grid;
+    margin: 0px;
+    grid-gap: 0px;
+    grid-template-areas: "a b" "c b" "d b" "e e";
+    grid-template-columns: 1fr fit-content(60%);
+}
+
+.current-consumption {
+    grid-area: a;
+}
+
+.average-electricity-share {
+    grid-area: b;
+}
+
+.button {
+    border-color: #23272a;
+    background-color: #d5eadb;
+    font-size: 14px;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    grid-area: c;
+    height: 60px;
+    width: 140px;
+    max-width: 50%;
+    max-height: 50%;
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+  }
+
+.meter-reading {
+    grid-area: c;
+}
+
+.average-consumption {
+    grid-area: d;
+}
+
+.chart {
+    grid-area: e;
+}
+
+.card{
+    background: #ededee;
+}
+
+.card-title {
+    color: #3c8761;
+    margin: 10px;
+    text-align: left;
+}
+
+.card-body {
+    text-align: right;
+    display: inline;
+}
+
+.card-body > div {
+    margin-left: 15px;
+}
+
+label {
+    font-size: 20px;
+    font-weight: normal;
+    float: left;
+}
+
+.value {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: right;
+}
+
+.unit {
+    font-size: 20px;
+    font-weight: normal;
+    text-align: right;
+}
+
+.info {
+    margin-left: 35px;
+    font-size: 12px;
+    font-style: italic;
+    float: right;
+}

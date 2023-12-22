@@ -1,0 +1,22 @@
+version: '3.7'
+
+#services:
+#  owner-frontend:
+#    image: angular-ownerfrontend-dev:1.0.0
+#    container_name: angular-ownerfrontend
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    volumes:
+#      - '.:/app'
+#      - '/app/node_modules'
+#    ports:
+#      - "4200:4200"
+#    env_file: '../backend/.env'
+#    networks:
+#      indeed-network:
+
+networks:
+  indeed-network:
+    name: indeed-network
+

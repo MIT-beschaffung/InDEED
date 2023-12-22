@@ -1,0 +1,235 @@
+#!/bin/bash
+now=$(date +"%Y-%m-%dT%H:%M:%SZ")
+
+set -a
+source ../backend/.env
+set +a
+
+# "Time" needs to be adjusted later!
+curl -s -X 'POST' \
+'https://ubt.indeed-energy.de/smaProbanden/logData' \
+-H 'accept: */*' \
+-H "api_key: ${API_KEY}" \
+-H 'Content-Type: application/json' \
+-d '{    
+    "Reference": "539df2ca-f41f-4573-8151-ed4eea1eb3ec",
+    "Time": "'$now'",
+    "Data": [
+      {
+        "Name": "425710900",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 1
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 1
+          }
+        ]
+<<<<<<< HEAD
+<<<<<<< HEAD
+      },
+      {
+        "Name": "440743500",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 2
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 2
+          }
+        ]
+=======
+>>>>>>> dev
+      },
+      {
+        "Name": "306603400",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 3
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 3
+          }
+        ]
+<<<<<<< HEAD
+      },
+      {
+        "Name": "622216400",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 4
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 4
+          }
+        ]
+      },
+      {
+        "Name": "205858500",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 5
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 5
+          }
+        ]
+      },
+      {
+        "Name": "571190700",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 6
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 6
+          }
+        ]
+      },
+      {
+        "Name": "559421200",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 7
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 7
+          }
+        ]
+      },
+      {
+        "Name": "526103400",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 8
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 8
+          }
+        ]
+      },
+      {
+        "Name": "541360200",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 9
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 9
+          }
+        ]
+      },
+      {
+        "Name": "522700200",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 10
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 10
+          }
+        ]
+      },
+      {
+        "Name": "609687200",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 11
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 11
+          }
+        ]
+      },
+      {
+        "Name": "563550000",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 12
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 12
+          }
+        ]
+      },
+      {
+        "Name": "398940500",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 13
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 13
+          }
+        ]
+      },
+      {
+        "Name": "597847700",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 14
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 14
+          }
+        ]
+      },
+      {
+        "Name": "311377700",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 15
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 15
+          }
+        ]
+      },
+      {
+        "Name": "217379700",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 16
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 16
+          }
+        ]
+      }
+    ]
+  }'
+
+echo ""
+echo ""

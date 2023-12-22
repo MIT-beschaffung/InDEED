@@ -1,0 +1,2 @@
+*/5 * * * * ~/InDEED_Universal/aries-indeed_framework/test/remoteApi.test >> ~/cronlog 2>&1
+*/5 * * * * ~/InDEED_Universal/aries-indeed_framework/test/triggerProofGeneration.test >> ~/cronlog 2>&1

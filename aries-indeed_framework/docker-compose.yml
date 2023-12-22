@@ -1,0 +1,48 @@
+version: "3.8"
+services: 
+  tuev:
+    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.3
+    container_name: agent-tuev
+    ports: 
+      - 8000:8000
+      - 8001:8001
+    volumes: 
+      - /var/lib/indy:/var/lib/indy
+    command: start --inbound-transport http 0.0.0.0 8000 --outbound-transport http --genesis-url http://172.17.0.1:9000/genesis --log-level info --seed 000000000000000000000000AnchorG1 --wallet-key 123456 --wallet-name TUEV --wallet-type indy --admin-api-key eNLsWFkAZP2kd3MxR65kM3WXx7aOoXZ44nGfuCxy --admin 0.0.0.0 8001 --endpoint http://172.17.0.1:8000 --label TUEV-Agent --auto-accept-invites --auto-accept-requests --auto-respond-messages --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-respond-presentation-proposal --auto-respond-presentation-request --auto-store-credential --auto-verify-presentation --wallet-local-did --webhook-url http://172.17.0.1:8100
+  plant:
+    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.3
+    container_name: agent-plant
+    ports: 
+      - 8005:8005
+      - 8006:8006
+    volumes: 
+      - /var/lib/indy:/var/lib/indy
+    command: start --inbound-transport http 0.0.0.0 8005 --outbound-transport http --genesis-url http://172.17.0.1:9000/genesis --log-level info --seed 000000000000000000000000AnchorG1 --wallet-key 123456 --wallet-name PLANT --wallet-type indy --admin-api-key eNLsWFkAZP2kd3MxR65kM3WXx7aOoXZ44nGfuCxy --admin 0.0.0.0 8006 --endpoint http://172.17.0.1:8005 --label PLANT-Agent --auto-accept-invites --auto-accept-requests --auto-respond-messages --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-respond-presentation-proposal --auto-respond-presentation-request --auto-store-credential --auto-verify-presentation --wallet-local-did --webhook-url http://172.17.0.1:8101
+  bna:
+    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.3
+    container_name: agent-bna
+    ports: 
+      - 8010:8010
+      - 8011:8011
+    volumes: 
+      - /var/lib/indy:/var/lib/indy
+    command: start --inbound-transport http 0.0.0.0 8010 --outbound-transport http --genesis-url http://172.17.0.1:9000/genesis --log-level debug --seed 000000000000000000000000Steward3 --wallet-key 123456  --wallet-name BNA --wallet-type indy --admin-api-key eNLsWFkAZP2kd3MxR65kM3WXx7aOoXZ44nGfuCxy --admin 0.0.0.0 8011 --endpoint http://172.17.0.1:8010 --label BNA-Agent --auto-accept-invites --auto-accept-requests --auto-respond-messages --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-respond-presentation-proposal --auto-respond-presentation-request --auto-store-credential --auto-verify-presentation --webhook-url http://172.17.0.1:8102
+  garantiegeber:
+    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.3
+    container_name: agent-garantiegeber
+    ports: 
+      - 8020:8020
+      - 8021:8021
+    volumes: 
+      - /var/lib/indy:/var/lib/indy
+    command: start --inbound-transport http 0.0.0.0 8020 --outbound-transport http --genesis-url http://172.17.0.1:9000/genesis --log-level info --seed 000000000000000000000000AnchorG1 --wallet-key 123456 --wallet-name GARANTIEGEBER --wallet-type indy --admin-api-key eNLsWFkAZP2kd3MxR65kM3WXx7aOoXZ44nGfuCxy --admin 0.0.0.0 8021 --endpoint http://172.17.0.1:8020 --label GARANTIEGEBER-Agent --auto-accept-invites --auto-accept-requests --auto-respond-messages --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-respond-presentation-proposal --auto-respond-presentation-request --auto-store-credential --auto-verify-presentation --wallet-local-did --webhook-url http://172.17.0.1:8104
+  owner:
+    image: bcgovimages/aries-cloudagent:py36-1.15-0_0.5.3
+    container_name: agent-owner
+    ports: 
+      - 8025:8025
+      - 8026:8026
+      - 8027:8027
+    volumes: 
+      - /var/lib/indy:/var/lib/indy
+    command: start --inbound-transport http 0.0.0.0 8025 --outbound-transport http --genesis-url http://172.17.0.1:9000/genesis --log-level info --seed 000000000000000000000000Steward3 --wallet-key 123456 --wallet-name OWNER --wallet-type indy --admin-api-key eNLsWFkAZP2kd3MxR65kM3WXx7aOoXZ44nGfuCxy --admin 0.0.0.0 8026 --endpoint http://172.17.0.1:8025 --label OWNER-Agent --auto-accept-invites --auto-accept-requests --auto-respond-messages --auto-respond-credential-proposal --auto-respond-credential-offer --auto-respond-credential-request --auto-respond-presentation-proposal --auto-respond-presentation-request --auto-store-credential --auto-verify-presentation --webhook-url http://172.17.0.1:8105

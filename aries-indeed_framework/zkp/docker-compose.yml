@@ -1,0 +1,37 @@
+version: "3"
+services: 
+  zkp-service:
+    image: nestjs-zkp-service-dev:1.0.0
+    container_name: zkp-service
+    build:
+      context: ..
+      target: development
+      dockerfile: ./zkp/Dockerfile_local
+    # ports: 
+      # - 8100:8100
+    env_file: '../backend/.env'
+    environment: 
+      - NAME=ZKP
+      - LOG_LEVEL=WARN
+    command:
+      - /bin/sh
+      - -c
+      - |
+        npm run start:dev
+        # tail -f /dev/null
+        #  && cp -r /usr/build /usr/circuits/labeling
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ../zkp/zkp-service/src:/usr/src/app/src
+      - ../quorum/build:/usr/build
+      - ../quorum/circuits:/usr/circuits
+      # - ../quorum/build/contracts:/usr/src/app/contracts
+      # - /usr/src/app/node_modules
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks: 
+      indeed-network:
+
+networks:
+  indeed-network:
+    name: indeed-network

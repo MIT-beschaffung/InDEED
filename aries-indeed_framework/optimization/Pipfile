@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+cplex = "==20.1.0.3"
+docplex = "==2.22.213"
+pandas = "==1.3.5"
+scipy = "==1.7.3"
+Flask = "==2.0.2"
+requests = "*"
+flask-restx = "*"
+werkzeug = "==2.0.3"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"

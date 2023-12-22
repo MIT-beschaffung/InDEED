@@ -1,0 +1,27 @@
+.card-header{
+    background: white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 2em;
+    color: #3c8761;
+}
+
+.card-footer {
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.card-footer > :first-child {
+    margin-right: auto;
+}
+.card-footer > :last-child {
+    margin-right: 42%;
+}

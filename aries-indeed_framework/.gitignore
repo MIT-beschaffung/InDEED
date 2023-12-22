@@ -1,0 +1,14 @@
+/**/.idea/*
+.idea/
+.vscode/
+
+yarn.lock
+yarn-error.log
+**/node_modules/*
+
+**/quorum/build/*
+**/quorum/circuits/labeling/*
+
+!*/quorum/circuits/labeling/*.circom
+
+*/.eslintcache

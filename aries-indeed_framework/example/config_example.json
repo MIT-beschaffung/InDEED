@@ -1,0 +1,18 @@
+{
+  "BNA": {
+    "url": "0.0.0.0",
+    "communication_port": 8050
+  },
+  "TUEV": {
+    "url": "0.0.0.0",
+    "communication_port": 8051
+  },
+  "PLANT": {
+    "url": "0.0.0.0",
+    "communication_port": 8052
+  },
+  "EVU": {
+    "url": "0.0.0.0",
+    "communication_port": 8053
+  }
+}

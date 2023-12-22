@@ -1,0 +1,8 @@
+form > * {
+    text-align: left;
+    padding-bottom: 10px
+}
+
+form {
+    align-self: center;
+}

@@ -1,0 +1,500 @@
+version: "3"
+services:
+  ubt:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-ubt
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    # ports:
+      # - 8105:8105
+    environment: 
+      - NAME=UBT
+      - LATITUDE=49.455652
+      - LONGITUDE=11.074666
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8105
+      - WEBHOOK_PORT=8105
+      - AGENT_PORT=8026
+      - HTTP_CUSTODIAL_PORT=8025
+      - LOCAL_DB_URI=mongodb://dbubt:27017/Assetlogs
+      - MERKLEROOT_DB_URI=mongodb+srv://merkle-testuser:merkle-testuser@merkletreetesting.dircl.mongodb.net/Merkleroots?retryWrites=true&w=majority
+      - QUORUM_NODE_URL=http://${quorum_ip_address}:${quorum_port}
+      - ROLE=UBT
+      - ACCURL=http://172.17.0.1:8750/merkletree
+      - API_KEY=${API_KEY}
+      - SECURITY_LEVEL=production
+      - LOG_LEVEL=WARN
+    command:
+      npm run start:dev
+      # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      - ../quorum/build/contracts:/usr/src/app/contracts
+      # - /usr/src/app/node_modules
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    networks:
+      indeed-network:
+
+  consumer1:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer1
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8106:8106
+    environment:
+      - NAME=CONSUMER1
+      - ROLE=CONSUMER
+      - LATITUDE=48.200764
+      - LONGITUDE=11.510461
+      - PREFERENCE=5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8106
+      - LOCAL_DB_URI=mongodb://dbconsumer1:27018/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - "dbconsumer1"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer2:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer2
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8108:8108
+    environment:
+      - NAME=CONSUMER2
+      - ROLE=CONSUMER
+      - LATITUDE=48.200764
+      - LONGITUDE=11.510461
+      - PREFERENCE=5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8108
+      - LOCAL_DB_URI=mongodb://dbconsumer2:27019/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - "dbconsumer2"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer3:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer3
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8113:8113
+    environment:
+      - NAME=CONSUMER3
+      - ROLE=CONSUMER
+      - LATITUDE=48.200764
+      - LONGITUDE=11.510461
+      - PREFERENCE=5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8113
+      - LOCAL_DB_URI=mongodb://dbconsumer3:27023/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+      - USERNAME=InDEED
+      - PASSWORD=indeed2021
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - "dbconsumer3"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer4:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer4
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8114:8114
+    environment:
+      - NAME=CONSUMER4
+      - ROLE=CONSUMER
+      - LATITUDE=48.200764
+      - LONGITUDE=11.510461
+      - PREFERENCE=5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8114
+      - LOCAL_DB_URI=mongodb://dbconsumer4:27024/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+      - USERNAME=InDEED
+      - PASSWORD=indeed2021
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - "dbconsumer4"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer5:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer5
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8115:8115
+    environment:
+      - NAME=CONSUMER5
+      - ROLE=CONSUMER
+      - LATITUDE=48.200764
+      - LONGITUDE=11.510461
+      - PREFERENCE=5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8115
+      - LOCAL_DB_URI=mongodb://dbconsumer5:27025/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+      - USERNAME=InDEED
+      - PASSWORD=indeed2021
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - "dbconsumer5"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer6:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer6
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8116:8116
+    environment:
+      - NAME=CONSUMER6
+      - ROLE=CONSUMER
+      - LATITUDE=48.200764
+      - LONGITUDE=11.510461
+      - PREFERENCE=5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8116
+      - LOCAL_DB_URI=mongodb://dbconsumer6:27026/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+      - USERNAME=InDEED
+      - PASSWORD=indeed2021
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - "dbconsumer6"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer7:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer7
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8117:8117
+    environment:
+      - NAME=CONSUMER7
+      - ROLE=CONSUMER
+      - LATITUDE=48.200764
+      - LONGITUDE=11.510461
+      - PREFERENCE=5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8117
+      - LOCAL_DB_URI=mongodb://dbconsumer7:27027/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+      - USERNAME=InDEED
+      - PASSWORD=indeed2021
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - "dbconsumer7"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer8:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer8
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8118:8118
+    environment:
+      - NAME=CONSUMER8
+      - ROLE=CONSUMER
+      - LATITUDE=48.200764
+      - LONGITUDE=11.510461
+      - PREFERENCE=5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8118
+      - LOCAL_DB_URI=mongodb://dbconsumer8:27028/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+      - USERNAME=InDEED
+      - PASSWORD=indeed2021
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - "dbconsumer8"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  owner:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-owner
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile_local
+    ports:
+      - 8107:8107
+    environment:
+      - NAME=OWNER
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8107
+      - WEBHOOK_PORT=8107
+      - LOCAL_DB_URI=mongodb://dbowner:27019/Assetlogs
+      - ROLE=OWNER
+      - API_KEY=${API_KEY}
+      - SECURITY_LEVEL=production
+      - LOG_LEVEL=WARN
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      - ../quorum/build/contracts:/usr/src/app/contracts
+      # - /usr/src/app/node_modules
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      indeed-network:
+
+  dbubt:
+    restart: on-failure
+    container_name: dbubt
+    image: mongo:4.2.16
+    # ports:
+      # - '27017:27017'
+    volumes:
+     - ../../data/dbproducer:/data/db
+    networks:
+      indeed-network:
+
+  dbconsumer1:
+    restart: on-failure
+    container_name: dbconsumer1
+    image: mongo:4.2.16
+    command: mongod --port 27018
+    # ports:
+      # - '27018:27018'
+    # volumes:
+     # - ../../data/dbconsumer:/data/db
+    networks:
+      indeed-network:
+
+  dbconsumer2:
+    restart: on-failure
+    container_name: dbconsumer2
+    image: mongo:4.2.16
+    command: mongod --port 27019
+    # ports:
+    # - '27018:27018'
+    networks:
+      indeed-network:
+
+  dbconsumer3:
+    restart: on-failure
+    container_name: dbconsumer3
+    image: mongo:4.2.16
+    command: mongod --port 27023
+    networks:
+      indeed-network:
+
+  dbconsumer4:
+    restart: on-failure
+    container_name: dbconsumer4
+    image: mongo:4.2.16
+    command: mongod --port 27024
+    networks:
+      indeed-network:
+
+  dbconsumer5:
+    restart: on-failure
+    container_name: dbconsumer5
+    image: mongo:4.2.16
+    command: mongod --port 27025
+    networks:
+      indeed-network:
+
+  dbconsumer6:
+    restart: on-failure
+    container_name: dbconsumer6
+    image: mongo:4.2.16
+    command: mongod --port 27026
+    networks:
+      indeed-network:
+
+  dbconsumer7:
+    restart: on-failure
+    container_name: dbconsumer7
+    image: mongo:4.2.16
+    command: mongod --port 27027
+    networks:
+      indeed-network:
+
+  dbconsumer8:
+    restart: on-failure
+    container_name: dbconsumer8
+    image: mongo:4.2.16
+    command: mongod --port 27028
+    networks:
+      indeed-network:
+
+  dbowner:
+    restart: on-failure
+    container_name: dbowner
+    image: mongo:4.2.16
+    command: mongod --port 27019
+    # ports:
+    # - '27019:27019'
+    volumes:
+     - ../../data/dbowner:/data/db
+    networks:
+      indeed-network:
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    depends_on:
+      - dbubt
+    networks:
+      - indeed-network
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=dbubt
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=
+      - ME_CONFIG_BASICAUTH_USERNAME=
+      - ME_CONFIG_BASICAUTH_PASSWORD=
+    ports:
+      - '8081:8081'
+    volumes:
+      - ./data:/data/db
+
+networks:
+  indeed-network:
+    name: indeed-network

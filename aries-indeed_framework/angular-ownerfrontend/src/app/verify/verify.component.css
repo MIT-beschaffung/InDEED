@@ -1,0 +1,16 @@
+/* #content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px; /* Need a specific value to work */
+
+.code {
+  color: rgb(250, 250, 250);
+  background: rgb(50, 50, 50);
+  border: 1px solid rgb(20, 20, 20);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+

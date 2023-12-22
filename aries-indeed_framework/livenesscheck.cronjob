@@ -1,0 +1,25 @@
+#!/bin/bash
+res=$(curl -s -I 'https://www.indeed-energy.de/api/')
+# echo "$res"
+# res2=$(echo "$res" | head -n 1 | cut -d$' ' -f2  )
+# echo "$res2"
+
+if [[ "$res2" == "502" ]] ; then
+
+    echo "$(date '+%A %W %Y %X') InDEED backend down" >> ~/livenesscheck.log
+    echo "$(date '+%A %W %Y %X') Sending notification email" >> ~/livenesscheck.log
+    echo "The InDEED API is currently down \n Sent: $(date '+%A %W %Y %X')" | mail -s "InDEED downtime notification" "johannes.sedlmeir@fim-rc.de"
+
+elif [[ "$res2" == "200" ]] ; then
+
+    echo "$(date '+%A %W %Y %X') InDEED backend up" >> ~/livenesscheck.log
+    echo "$(date '+%A %W %Y %X') Doing nothing" >> ~/livenesscheck.log
+
+else 
+
+    echo "$(date '+%A %W %Y %X') InDEED backend unknown http response code: $res2" >> ~/livenesscheck.log
+    echo "$(date '+%A %W %Y %X') Full http response: $res" >> ~/livenesscheck.log
+    echo "$(date '+%A %W %Y %X') Sending notification email" >> ~/livenesscheck.log
+    echo "$(date '+%A %W %Y %X') The InDEED API may be down" | mail -s "InDEED potential downtime notification" "johannes.sedlmeir@fim-rc.de"
+
+fi

@@ -1,0 +1,270 @@
+#!/bin/bash
+
+set -a
+source ../backend/.env
+set +a
+
+# sudo rm -rf /var/log/indeed/*
+
+# docker stop nestjs-consumer dbconsumer
+# docker rm nestjs-consumer dbconsumer
+# cd ../backend
+# docker-compose up -d consumer dbconsumer
+# cd ..
+
+# # sleep 120
+
+# echo "Resetting the consumer backend"
+# # res=$(curl -s -X 'DELETE' \
+# #   'http://localhost:8106/consumer' \
+# #   -H 'accept: */*' \
+# #   -H 'api_key: ${API_KEY}' \
+# #   -H 'Content-Type: application/json' \
+# #   -d '{}')
+# # echo $res
+
+# echo "Resetting the UBT backend"
+# res=$(curl -s -X 'DELETE' \
+#   'http://localhost:8105/labeling/reset' \
+#   -H 'accept: */*')
+# echo $res
+
+# while true
+# do
+  echo "------"
+  echo "remoteApi Test running ..."
+
+  now=$(date +"%T")
+  echo "Current time : $now"
+
+  echo ""
+  echo "request sma logData"
+  echo ""
+
+  curl -s -X 'POST' \
+    'http://localhost:8105/sma/logData' \
+    -H 'accept: */*' \
+    -H 'api_key: ${API_KEY}' \
+    -H 'Content-Type: application/json' \
+    -d '{
+          "Reference": "a2e82a12-001b-4203-8f5b-777ee537b93c",
+          "Time": "'"$(date +"%Y-%m-%dT%H:%M:%SZ")"'",
+          "Data": [
+            {
+              "RegionName": "Germany|04600",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 17
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 86.04
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 141.905
+                }
+              ]
+            },
+            {
+              "RegionName": "Germany|04603",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 13
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 63.381
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 107.395
+                }
+              ]
+            },
+            {
+              "RegionName": "Germany|08301",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 7
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 43.943
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 64.586
+                }
+              ]
+            },
+            {
+              "RegionName": "Germany|08309",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 7
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 26.637
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 42.82
+                }
+              ]
+            },
+            {
+              "RegionName": "Germany|25917",
+              "Values": [
+              {
+                  "Mmt": "PlantCount",
+                  "V": 32
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 233.111
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 430.605
+                }
+              ]
+            },
+            {
+              "RegionName": "Germany|59609",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 69
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 494.29
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 918.248
+              }
+              ]
+            },
+            {
+              "RegionName": "Germany|71154",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 16
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 74.101
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 288.1
+                }
+              ]
+            },
+            {
+              "RegionName": "Germany|85567",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 31
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 117.221
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 365.391
+                }
+              ]
+            },
+            {
+              "RegionName": "Germany|85656",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 10
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 84.343
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 198.07
+                }
+              ]
+            },
+            {
+              "RegionName": "Germany|91177",
+              "Values": [
+                {
+                  "Mmt": "PlantCount",
+                  "V": 19
+                },
+                {
+                  "Mmt": "PvProduction",
+                  "V": 53.261
+                },
+                {
+                  "Mmt": "InstalledPower",
+                  "V": 211.52
+                }
+              ]
+            }
+          ]
+        }' | jq > /dev/null
+
+  echo ""
+  echo "request ffe logData"
+  echo ""
+
+  CONSUMED=$(echo "scale=3; $((RANDOM%10000))/100" | bc -l)
+  # echo $CONSUMED
+
+  curl -s -X 'POST' \
+      'http://localhost:8105/ffe/logData' \
+      -H 'accept: */*' \
+      -H 'api_key: ${API_KEY}' \
+      -H 'Content-Type: application/json' \
+      -d '{
+            "consumedPower": '$CONSUMED',
+            "ownerPubKey_x": "111222333444555666777888999",
+            "role": "Consumer",
+            "epoch": '"$(date +"%s")"'
+          }' | jq > /dev/null
+
+  sleep 5 #30
+
+
+  echo ""
+  echo "Filling with dummy data"
+  curl -s -X 'POST' \
+    'http://localhost:8105/labeling/fillDummyLoggedData' \
+    -H 'accept: */*' \
+    -d ''
+  sleep 10 #60
+
+
+  echo ""
+  echo "Triggering proof creation"
+  curl -s -X 'POST' \
+    'http://localhost:8105/labeling/triggerLabelingProofGeneration' \
+    -H 'accept: */*' \
+    -d ''
+  # sleep 120
+
+# done
+
+echo ""
+now=$(date +"%T")
+echo "Current time : $now"
+echo ""

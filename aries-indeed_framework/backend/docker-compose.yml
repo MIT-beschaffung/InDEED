@@ -1,0 +1,1174 @@
+version: "3"
+services:
+  ubt:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-ubt
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    # ports:
+      # - 8105:8105
+    environment:
+      - NAME=UBT
+      - LATITUDE=49.455652
+      - LONGITUDE=11.074666
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8105
+      - WEBHOOK_PORT=8105
+      - AGENT_PORT=8026
+      - HTTP_CUSTODIAL_PORT=8025
+      - LOCAL_DB_URI=mongodb://dbubt:27017/Assetlogs
+      - MERKLEROOT_DB_URI=mongodb+srv://merkle-testuser:merkle-testuser@merkletreetesting.dircl.mongodb.net/Merkleroots?retryWrites=true&w=majority
+      - QUORUM_NODE_URL=http://${quorum_ip_address}:${quorum_port}
+      - ROLE=UBT
+      - ACCURL=http://172.17.0.1:8750/merkletree
+      - API_KEY=${API_KEY}
+      - SECURITY_LEVEL=${SECURITY_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command: 
+      npm run start:dev
+      # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      - ../quorum/build/contracts:/usr/src/app/contracts
+      # - /usr/src/app/node_modules
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - authentication
+      - dbubt
+    networks: 
+      indeed-network:
+
+  authentication:
+    restart: on-failure
+    image: auth-api-dev
+    container_name: nestjs-authentication
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8110:8110
+    environment:
+      - ROLE=AUTH
+      - NAME=AUTHENTICATION
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8110
+      - LOCAL_DB_URI=mongodb://dbusers:27022/
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=WARN
+      - VAULT_TOKEN=${VAULT_TOKEN}
+      - VAULT_KEYS=${VAULT_KEYS}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+      - APP_ROLE=${APP_ROLE}
+    command:
+      npm run start:dev
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - dbusers
+      - secret-vault
+    networks:
+      indeed-network:
+
+  consumer1:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer1
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8106:8106
+    environment:
+      - NAME=CONSUMER1
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=Rheinenergie_c_5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8106
+      - LOCAL_DB_URI=mongodb://dbconsumer1:27018/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+
+    depends_on:
+      - ubt
+      - dbconsumer1
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer2:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer2
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8108:8108
+    environment:
+      - NAME=CONSUMER2
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=FfE
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8108
+      - LOCAL_DB_URI=mongodb://dbconsumer2:27020/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer2
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer3:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer3
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8109:8109
+    environment:
+      - NAME=CONSUMER3
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMA_c_7
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8109
+      - LOCAL_DB_URI=mongodb://dbconsumer3:27021/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer3
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  # SMA Probanden
+
+  consumer01:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer01
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8201:8201
+    environment:
+      - NAME=CONSUMER01
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_0
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8201
+      - LOCAL_DB_URI=mongodb://dbconsumer01:27101/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer01
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer02:
+    restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer02
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8202:8202
+    environment:
+      - NAME=CONSUMER02
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_1
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8202
+      - LOCAL_DB_URI=mongodb://dbconsumer02:27102/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer02
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer03:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer03
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8203:8203
+    environment:
+      - NAME=CONSUMER03
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_2
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8203
+      - LOCAL_DB_URI=mongodb://dbconsumer03:27103/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer03
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer04:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer04
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8204:8204
+    environment:
+      - NAME=CONSUMER04
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_3
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8204
+      - LOCAL_DB_URI=mongodb://dbconsumer04:27104/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer04
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer05:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer05
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8205:8205
+    environment:
+      - NAME=CONSUMER05
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_4
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8205
+      - LOCAL_DB_URI=mongodb://dbconsumer05:27105/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer05
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer06:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer06
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8206:8206
+    environment:
+      - NAME=CONSUMER06
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_5
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8206
+      - LOCAL_DB_URI=mongodb://dbconsumer06:27106/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer06
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer07:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer07
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8207:8207
+    environment:
+      - NAME=CONSUMER07
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_6
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8207
+      - LOCAL_DB_URI=mongodb://dbconsumer07:27107/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer07
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer08:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer08
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8208:8208
+    environment:
+      - NAME=CONSUMER08
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_7
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8208
+      - LOCAL_DB_URI=mongodb://dbconsumer08:27108/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer08
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer09:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer09
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8209:8209
+    environment:
+      - NAME=CONSUMER09
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_8
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8201
+      - LOCAL_DB_URI=mongodb://dbconsumer09:27109/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer09
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer10:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer10
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8210:8210
+    environment:
+      - NAME=CONSUMER10
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_9
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8210
+      - LOCAL_DB_URI=mongodb://dbconsumer10:27110/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer10
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer11:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer11
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8211:8211
+    environment:
+      - NAME=CONSUMER11
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_10
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8211
+      - LOCAL_DB_URI=mongodb://dbconsumer11:27111/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer11
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer12:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer12
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8212:8212
+    environment:
+      - NAME=CONSUMER12
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMA_c_9
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8212
+      - LOCAL_DB_URI=mongodb://dbconsumer12:27112/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer12
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer13:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer13
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8213:8213
+    environment:
+      - NAME=CONSUMER13
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_12
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8213
+      - LOCAL_DB_URI=mongodb://dbconsumer13:27113/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer13
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer14:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer14
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8214:8214
+    environment:
+      - NAME=CONSUMER14
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_13
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8214
+      - LOCAL_DB_URI=mongodb://dbconsumer14:27114/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer14
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer15:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer15
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8215:8215
+    environment:
+      - NAME=CONSUMER15
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_14
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8215
+      - LOCAL_DB_URI=mongodb://dbconsumer15:27115/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer15
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer16:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer16
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8216:8216
+    environment:
+      - NAME=CONSUMER16
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_15
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8216
+      - LOCAL_DB_URI=mongodb://dbconsumer16:27116/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer16
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  consumer17:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-consumer17
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8217:8217
+    environment:
+      - NAME=consumer17
+      - ROLE=CONSUMER
+      - 'PREFERENCE={"wasser": 3, "solar":3}'
+      - PROSUMER_NAME=SMAprobanden_c_16
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8217
+      - LOCAL_DB_URI=mongodb://dbconsumer17:27117/raspi
+      - API_KEY=${API_KEY}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - ubt
+      - dbconsumer17
+      - authentication
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+
+  owner:
+    #restart: on-failure
+    image: nestjs-api-dev:1.0.0
+    container_name: nestjs-owner
+    build:
+      context: ../.
+      target: development
+      dockerfile: ./backend/Dockerfile
+    ports:
+      - 8107:8107
+    environment:
+      - NAME=OWNER
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8107
+      - WEBHOOK_PORT=8107
+      - LOCAL_DB_URI=mongodb://dbowner:27019/Assetlogs
+      - ROLE=OWNER
+      - QUORUM_NODE_URL=http://${quorum_ip_address}:${quorum_port}
+      - API_KEY=${API_KEY}
+      - SECURITY_LEVEL=${SECURITY_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - QUORUM_SERVICE_URL=http://nestjs-ubt:8105/quorum/
+      - CENTRAL_BACKEND_URL=http://nestjs-ubt:8105/
+      - ROLE_ID=${ROLE_ID}
+      - SECRET_ID=${SECRET_ID}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      - ../quorum/build/contracts:/usr/src/app/contracts
+      # - /usr/src/app/node_modules
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - dbowner
+      - authentication
+    networks:
+      indeed-network:
+
+  dbubt:
+    restart: on-failure
+    container_name: dbubt
+    image: mongo:4.2.16
+    # ports:
+      # - '27017:27017'
+    volumes:
+     - ../../data/dbproducer:/data/db
+    networks:
+      indeed-network:
+
+  dbconsumer1:
+    restart: on-failure
+    container_name: dbconsumer1
+    image: mongo:4.2.16
+    command: mongod --port 27018
+    # ports:
+      # - '27018:27018'
+    volumes:
+      - ../../data/dbconsumer1:/data/db
+    networks:
+      indeed-network:
+
+  dbconsumer2:
+    restart: on-failure
+    container_name: dbconsumer2
+    image: mongo:4.2.16
+    command: mongod --port 27020
+    # ports:
+    # - '27020:27020'
+    volumes:
+      - ../../data/dbconsumer2:/data/db
+    networks:
+      indeed-network:
+
+  dbconsumer3:
+    restart: on-failure
+    container_name: dbconsumer3
+    image: mongo:4.2.16
+    command: mongod --port 27021
+    # ports:
+    # - '27021:27021'
+    volumes:
+      - ../../data/dbconsumer3:/data/db
+    networks:
+      indeed-network:
+
+  # SMA Probanden db
+
+  dbconsumer01:
+    restart: on-failure
+    container_name: dbconsumer01
+    image: mongo:4.2.16
+    command: mongod --port 27101
+    networks:
+      indeed-network:
+
+  dbconsumer02:
+    restart: on-failure
+    container_name: dbconsumer02
+    image: mongo:4.2.16
+    command: mongod --port 27102
+    networks:
+      indeed-network:
+
+  dbconsumer03:
+    restart: on-failure
+    container_name: dbconsumer03
+    image: mongo:4.2.16
+    command: mongod --port 27103
+    networks:
+      indeed-network:
+
+  dbconsumer04:
+    restart: on-failure
+    container_name: dbconsumer04
+    image: mongo:4.2.16
+    command: mongod --port 27104
+    networks:
+      indeed-network:
+
+  dbconsumer05:
+    restart: on-failure
+    container_name: dbconsumer05
+    image: mongo:4.2.16
+    command: mongod --port 27105
+    networks:
+      indeed-network:
+
+  dbconsumer06:
+    restart: on-failure
+    container_name: dbconsumer06
+    image: mongo:4.2.16
+    command: mongod --port 27106
+    networks:
+      indeed-network:
+
+  dbconsumer07:
+    restart: on-failure
+    container_name: dbconsumer07
+    image: mongo:4.2.16
+    command: mongod --port 27107
+    networks:
+      indeed-network:
+
+  dbconsumer08:
+    restart: on-failure
+    container_name: dbconsumer08
+    image: mongo:4.2.16
+    command: mongod --port 27108
+    networks:
+      indeed-network:
+
+  dbconsumer09:
+    restart: on-failure
+    container_name: dbconsumer09
+    image: mongo:4.2.16
+    command: mongod --port 27109
+    networks:
+      indeed-network:
+
+  dbconsumer10:
+    restart: on-failure
+    container_name: dbconsumer10
+    image: mongo:4.2.16
+    command: mongod --port 27110
+    networks:
+      indeed-network:
+
+  dbconsumer11:
+    restart: on-failure
+    container_name: dbconsumer11
+    image: mongo:4.2.16
+    command: mongod --port 27111
+    networks:
+      indeed-network:
+
+  dbconsumer12:
+    restart: on-failure
+    container_name: dbconsumer12
+    image: mongo:4.2.16
+    command: mongod --port 27112
+    networks:
+      indeed-network:
+
+  dbconsumer13:
+    restart: on-failure
+    container_name: dbconsumer13
+    image: mongo:4.2.16
+    command: mongod --port 27113
+    networks:
+      indeed-network:
+
+  dbconsumer14:
+    restart: on-failure
+    container_name: dbconsumer14
+    image: mongo:4.2.16
+    command: mongod --port 27114
+    networks:
+      indeed-network:
+
+  dbconsumer15:
+    restart: on-failure
+    container_name: dbconsumer15
+    image: mongo:4.2.16
+    command: mongod --port 27115
+    networks:
+      indeed-network:
+
+  dbconsumer16:
+    restart: on-failure
+    container_name: dbconsumer16
+    image: mongo:4.2.16
+    command: mongod --port 27116
+    networks:
+      indeed-network:
+
+  dbconsumer17:
+    restart: on-failure
+    container_name: dbconsumer17
+    image: mongo:4.2.16
+    command: mongod --port 27117
+    networks:
+      indeed-network:
+
+  dbowner:
+    restart: on-failure
+    container_name: dbowner
+    image: mongo:4.2.16
+    command: mongod --port 27019
+    # ports:
+    # - '27019:27019'
+    volumes:
+    - ../../data/dbowner:/data/db
+    networks:
+      indeed-network:
+
+  dbusers:
+    restart: on-failure
+    container_name: dbusers
+    image: mongo:4.2.16
+    command: mongod --port 27022
+    volumes:
+      - ../../data/dbusers:/data/db
+    networks:
+      indeed-network:
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    depends_on:
+      - dbubt
+    networks:
+      - indeed-network
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=dbubt
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=
+      - ME_CONFIG_BASICAUTH_USERNAME=user
+      - ME_CONFIG_BASICAUTH_PASSWORD=${DB_KEY}
+    ports:
+      - '8081:8081'
+    volumes:
+      - ./data:/data/db
+
+  secret-vault:
+    container_name: secret-vault
+    image: vault
+    networks:
+      - indeed-network
+    environment:
+      - VAULT_ADDR=http://secret-vault:8200
+      - VAULT_LOCAL_CONFIG=
+        ui = true 
+        disable_mlock = true
+        storage "raft" { 
+        path = "/vault/file" 
+        node_id = "node_1" 
+        }
+        listener "tcp" {
+        address = "secret-vault:8200"
+        tls_disable = "true"
+        }
+        default_lease_ttl = "168h"
+        max_lease_ttl = "720h"
+        api_addr = "http://secret-vault:8200"
+        cluster_addr = "http://secret-vault:8201"
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - '8200:8200'
+    volumes:
+      - ../../vault/logs:/vault/logs
+      - ../../vault/file:/vault/file
+      - ../../vault/config:/vault/config
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: ['vault', 'server', '-config=/vault/config/']
+
+networks:
+  indeed-network:
+    name: indeed-network

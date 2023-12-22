@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -a
+source ../backend/.env
+set +a
+
+testSize=3
+offset = 10
+
+echo "Logging Testdata"
+
+ids=()
+
+for i in {10..15}
+do
+  echo "$i";
+  ids+=$(curl -X 'POST' \
+      'https://owner.indeed-energy.de/loggeddata' \
+      --insecure  \
+      --silent\
+      -H 'accept: */*' \
+      -H 'api_key: ${API_KEY}' \
+      -H 'Content-Type: application/json' \
+      -d "{\"testValue\" : $i }" | jq ._id)
+done
+
+
+echo "Got ids: $ids"
+echo ""
+
+idsJson=$(echo "${ids[@]}" | jq -s)
+
+echo "registering data for remote Notarization"
+
+proof=$(curl -X 'POST' \
+          'https://owner.indeed-energy.de/remoteNotarize/registerIDSForRemoteNotarization' \
+          --insecure  \
+          --silent\
+          -H 'accept: */*' \
+          -H 'api_key: ${API_KEY}' \
+          -H 'Content-Type: application/json' \
+          -d "$idsJson")
+
+echo "Remote id: $proof"

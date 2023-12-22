@@ -1,0 +1,408 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    restart: on-failure
+    depends_on:
+      - frontend1
+      - frontend2
+      - frontend3
+      - auth-frontend
+      # SMA Probanden
+      - frontend01
+      - frontend02
+      - frontend03
+      - frontend04
+      - frontend05
+      - frontend06
+      - frontend07
+      - frontend08
+      - frontend09
+      - frontend10
+      - frontend11
+      - frontend12
+      - frontend13
+      - frontend14
+      - frontend15
+      - frontend16
+      - frontend17
+    volumes:
+      - ./nginx_templates/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx_templates/localSSL/:/etc/nginx/localSSL/
+      - ./nginx_templates/.well-known/acme-challenge/:/var/www/letsencrypt/.well-known/acme-challenge/
+      - /etc/letsencrypt/:/etc/letsencrypt/
+      # - ./build/:/etc/nginx/build/
+    ports:
+      - "80:8080"
+      - "443:443"
+    environment:
+      - NGINX_PORT=80
+    networks:
+      indeed-network:
+
+  # SMA Probanden
+
+  frontend1:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-consumerfrontend1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend2:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-consumerfrontend2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3001:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend3:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-consumerfrontend3
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3002:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  auth-frontend:
+    image: react-auth-frontend-dev:1.0.0
+    container_name: react-auth-frontend
+    build:
+      context: authentication
+      dockerfile: Dockerfile
+    volumes:
+      - ./authentication/public:/app/public
+      - ./authentication/src:/app/src
+    ports:
+      - 4000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    tty: true
+    stdin_open: true
+    networks:
+      indeed-network:
+
+  frontend01:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend01
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3101:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend02:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend02
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3102:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend03:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend03
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3103:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend04:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend04
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3104:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend05:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend05
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3105:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend06:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend06
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3106:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend07:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend07
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3107:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend08:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend08
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3108:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend09:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend09
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3109:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend10:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend10
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3110:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend11:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend11
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3111:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend12:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend12
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3112:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend13:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend13
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3113:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend14:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend14
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3114:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend15:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend15
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3115:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend16:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend16
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3116:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+  frontend17:
+    image: react-consumerfrontend-dev:1.0.0
+    container_name: react-probandfrontend17
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # - ./build/:/app/build/
+    ports:
+      - 3117:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      indeed-network:
+
+networks:
+  indeed-network:
+    name: indeed-network
+

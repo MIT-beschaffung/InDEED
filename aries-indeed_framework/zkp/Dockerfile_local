@@ -1,0 +1,102 @@
+FROM ubuntu:20.04 As development
+
+WORKDIR /usr/src/app
+
+USER root
+
+# Replace shell with bash so we can source files
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# Update and install prerequisites
+RUN apt-get update > /dev/null \
+  && apt-get upgrade -y > /dev/null
+RUN apt-get install -y \
+  curl \
+  wget \
+  git \
+  gcc \
+  build-essential \
+  libssl-dev \
+  nlohmann-json3-dev \
+  libgmp-dev \
+  nasm \
+  build-essential \
+  libgmp-dev \
+  libsodium-dev \
+  > /dev/null
+
+
+# Install CMAKE
+RUN cd /tmp \
+  && wget -q https://github.com/Kitware/CMake/releases/download/v3.20.0/cmake-3.20.0.tar.gz \
+  && tar -zxvf cmake-3.20.0.tar.gz > /dev/null \
+  && cd cmake-3.20.0 \
+  && ./bootstrap > /dev/null \
+  && make > /dev/null \
+  && make install > /dev/null
+
+# Declare constants
+ENV NVM_VERSION v0.39.0
+ENV NODE_VERSION v17.3.0
+
+# Install NVM
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh | bash
+
+# Install NODE
+RUN source ~/.nvm/nvm.sh; \
+    nvm install $NODE_VERSION; \
+    nvm use --delete-prefix $NODE_VERSION;
+
+ENV PATH=$PATH:/root/.nvm/versions/node/${NODE_VERSION}/bin
+RUN echo $(node -v)
+RUN echo $(npm -v)
+
+# Install rapidsnark
+RUN cd /usr \
+  && git clone https://github.com/iden3/rapidsnark.git \
+  && cd rapidsnark \
+  && npm install \
+  && git submodule init \
+  && git submodule update \
+  && npx task createFieldSources \
+  && npx task buildProver
+
+COPY ./zkp/zkp-service/package*.json ./
+
+RUN npm install glob rimraf
+
+RUN npm install --only=development
+
+COPY ./zkp/zkp-service .
+
+# Install SNARKJS
+RUN npm i snarkjs -g
+
+
+RUN npm run build
+
+# FROM node:12.13-alpine as production
+
+# ARG NODE_ENV=production
+# ENV NODE_ENV=${NODE_ENV}
+
+# WORKDIR /usr/src/app
+
+# COPY zkp-service/package*.json ./
+
+# RUN npm install --only=production
+
+# COPY ./zkp/zkp-service .
+
+# COPY --from=development /usr/src/app/dist ./dist
+
+# # Install SNARKJS
+# RUN npm i snarkjs -g
+
+# Install dependencies for C++ witness generation
+# RUN apt-get install -y \
+  # nlohmann-json3-dev \
+  # libgmp-dev \
+  # nasm
+
+# CMD ["node", "dist/main"]

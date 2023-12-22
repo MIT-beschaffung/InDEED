@@ -1,0 +1,23 @@
+.card{
+    margin-top: 65px;
+    background: #ededee;
+    max-width: 1100px;
+    padding: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+}
+
+.card-title{
+    color: #3c8761;
+    text-align: left;
+    font-size: 20px;
+}
+
+.card-body{
+    text-align: center;
+}
+.card-text {
+    text-align: justify;
+}

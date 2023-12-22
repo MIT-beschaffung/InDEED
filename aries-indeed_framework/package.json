@@ -1,0 +1,45 @@
+{
+  "name": "aries-indeed-framework",
+  "version": "1.0.0",
+  "description": "Framework for indeed process of the Aries Cloud Agent - Python (ACA-Py).",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc ./*.ts",
+    "test": "tsc && node indeed.js",
+    "debug": "tsc && node --inspect-brk=0.0.0.0:9229 indeed.js",
+    "dev": "ts-node-dev"
+  },
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "@nestjs/swagger": "^5.1.5",
+    "@types/http-terminator": "^2.0.1",
+    "@types/node": "^14.6.0",
+    "@types/socket.io": "^2.1.12",
+    "axios": "^0.21.1",
+    "bignumber.js": "^9.0.0",
+    "body-parser": "^1.19.0",
+    "convert-array-to-csv": "^1.0.8",
+    "es6-promise": "^4.2.8",
+    "express": "^4.17.1",
+    "http-terminator": "^2.0.3",
+    "log4js": "^6.3.0",
+    "needle": "^2.5.2",
+    "node-progress": "^0.1.0",
+    "promise": "^8.1.0",
+    "request": "^2.88.2",
+    "rxjs": "^6.6.3",
+    "socket.io": "^3.0.4",
+    "stdio": "^0.2.7",
+    "swagger-ui-express": "^4.2.0",
+    "truffle": "^5.1.53",
+    "tsc": "^1.20150623.0",
+    "typescript": "^4.0.3",
+    "typings": "^1.3.2",
+    "web3": "^1.3.0"
+  },
+  "devDependencies": {
+    "@types/needle": "^2.5.1",
+    "ts-node-dev": "^1.1.1"
+  }
+}

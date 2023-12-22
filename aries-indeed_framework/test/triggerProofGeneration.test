@@ -1,0 +1,131 @@
+#!/bin/bash
+
+set -a
+source ../backend/.env
+set +a
+
+# sleep 120
+sleep 30
+
+# echo ""
+# echo "Filling with dummy data"
+# curl --insecure -s -X 'POST' \
+#   'https://ubt.indeed-energy.de/labeling/fillDummyLoggedData' \
+#   -H 'accept: */*' \
+#   -H 'api_key: ${API_KEY}' \
+#   -d ''
+
+# sleep 10
+
+echo ""
+echo "Triggering proof creation"
+curl --insecure -s -X 'POST' \
+  'https://ubt.indeed-energy.de/labeling/triggerLabelingProofGeneration' \
+  -H 'accept: */*' \
+  -H 'api_key: ${API_KEY}' \
+  -d ''
+echo ""
+
+# echo ""
+# echo "Receiving Opt-Webhook"
+# curl --insecure -s -X 'POST' \
+#   'https://ubt.indeed-energy.de/labeling/receiveOptimizationWebhook' \
+#   -H 'accept: */*' \
+#   -H 'api_key: ${API_KEY}' \
+#   -d ''
+# echo ""
+
+# curl -X 'GET' \
+#   'http://opt.indeed-energy.de/optimize/0' \
+#   -H 'accept: application/json' \
+#   -H 'api_key: ${API_KEY}'
+
+# echo ""
+# echo "Triggering optimization"
+# curl --insecure -X 'POST' \
+#   'https://opt.indeed-energy.de/optimize' \
+#   -H 'accept: application/json' \
+#   -H 'api_key: ${API_KEY}' \
+#   -H 'Content-Type: application/json' \
+#   -d '{
+#   "consumers": [
+#     [
+#       "C1"
+#     ],
+#     [
+#       "1"
+#     ]
+#   ],
+#   "generators": [
+#     [
+#       "G1"
+#     ],
+#     [
+#       "2"
+#     ]
+#   ],
+#   "cost_matrix": [
+#     [
+#       0
+#     ]
+#   ],
+#   "loggedProsumerIds": [
+#     "62985caeaa702ce94ff5e3e8", "62985d65aa702ce94ff5e563"
+#   ],
+#   "locations": [
+#     [
+#       45.12345678912345,8.12345678912345
+#     ],
+#     [
+#       44.12345678912345,7.12345678912345
+#     ]
+#   ]
+# }'
+
+
+# echo ""
+# echo "GET optimize/0"
+# curl --insecure -X 'GET' \
+#   'https://opt.indeed-energy.de/optimize/0' \
+#   -H 'accept: application/json' \
+#   -H 'api_key: ${API_KEY}'
+
+# sleep 600
+
+echo ""
+now=$(date +"%T")
+echo "Current time : $now"
+echo ""
+
+
+# sleep 15
+# curl -X POST 'http://localhost:8105/labeling/receiveOptimizationWebhook'
+
+
+# curl -X 'GET' \
+#       'http://localhost:8105/masterData/byKey' \
+#       -H 'accept: */*' \
+#       -H 'api_key: ${API_KEY}' \
+#       -d ''860838227397740003410720166402735029151646116142087501068114543370791996327''
+
+# curl -X 'GET' \
+#       'http://localhost:8105/masterData/manyByKeys' \
+#       -H 'accept: */*' \
+#       -H 'api_key: ${API_KEY}' \
+#       -d '["1105756272713093282309438419122717338334545293142588327357982765288627313712", \
+#          "3410484828112757934424212284777328073413747371185719254958465160846237771087"]'
+
+
+# curl -X 'PUT' \
+#       'http://localhost:8105/masterData/completeBody' \
+#       -H 'accept: */*' \
+#       -H 'api_key: ${API_KEY}' \
+#       -H 'Content-Type: application/json' \
+#       -d '{
+#             "pubKey_x": "123456789",
+#             "location": {
+#               "latitude": 49.437939,
+#               "longitude": 10
+#             },
+#             "preference": 0
+#           }'

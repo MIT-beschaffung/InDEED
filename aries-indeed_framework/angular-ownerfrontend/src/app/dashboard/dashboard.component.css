@@ -1,0 +1,54 @@
+/* DashboardComponent's private CSS styles */
+
+
+  @media (min-width: 600px) {
+    a {
+      width: 18%;
+      box-sizing: content-box;
+    }
+  }
+
+  a:hover {
+    background-color: #000;
+  }
+h2{
+  text-align: center;
+}
+.container{
+  font-size: 18px;
+  margin-top: 60px;
+  text-align: justify;
+}
+#process-chart{
+  width: 80%;
+  height: auto;
+}
+.logo_img{
+  width: 100%;
+  max-width: 223px;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+.logo_btn{
+  background: none;
+  border: none;
+  height: 223px;
+
+
+  display: table;
+  justify-content: center;
+  cursor: pointer;
+  vertical-align: middle;
+
+}
+.img_wrap{
+
+  width: 100%;
+  margin: auto;
+  display: table-cell;
+  vertical-align: middle;
+}
+.logo_btn:hover{
+  background: none;
+}

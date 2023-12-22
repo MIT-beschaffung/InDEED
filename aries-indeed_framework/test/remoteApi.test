@@ -1,0 +1,309 @@
+#!/bin/bash
+
+set -a
+source ../backend/.env
+set +a
+
+cd $(dirname $0)
+
+echo "------"
+echo "remoteApi Test running ..."
+
+now=$(date +"%T")
+echo "Current time : $now"
+echo ""
+
+echo "push sma logData (kW)"
+# "Time" needs to be adjusted later!
+curl -s -X 'POST' \
+'https://ubt.indeed-energy.de/sma/logData' \
+-H 'accept: */*' \
+-H "api_key: ${API_KEY}" \
+-H 'Content-Type: application/json' \
+-d '{
+    "Reference": "607a814a-addc-44ef-b334-56d3079f0cbc",
+    "Time": "2022-09-01T13:50:00Z",
+    "Data": [
+      {
+        "RegionName": "Germany|04600",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 27.994
+          },{
+            "Mmt": "GridConsumption",
+            "V": 7.994
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 45.048
+          }
+        ]
+      },
+      {
+        "RegionName": "Germany|04603",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 14.232
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 0
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 64.475
+          }
+        ]
+      },
+      {
+        "RegionName": "Germany|08301",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 46.563
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 0
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 29.476
+          }
+        ]
+      },
+      {
+        "RegionName": "Germany|08309",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 31.339
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 16.935
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 34.973
+          }
+        ]
+      },
+      {
+        "RegionName": "Germany|25917",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 73.198
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 13.348
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 183.314
+          }
+        ]
+      },
+      {
+        "RegionName": "Germany|59609",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 226.329
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 0.327
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 423.239
+          }
+        ]
+      },
+      {
+        "RegionName": "Germany|71154",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 33.583
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 0
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 153.344
+          }
+        ]
+      },
+      {
+        "RegionName": "Germany|85567",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 138.915
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 10.3
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 186.838
+          }
+        ]
+      },
+      {
+        "RegionName": "Germany|85656",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 134.745
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 8.2
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 156.847
+           }
+        ]
+      },
+      {
+        "RegionName": "Germany|91177",
+        "Values": [
+          {
+            "Mmt": "GridFeedIn",
+            "V": 134.745
+          },
+          {
+            "Mmt": "GridConsumption",
+            "V": 8.2
+          },
+          {
+            "Mmt": "PvProduction",
+            "V": 156.847
+          }
+        ]
+      }
+    ],
+    "timestamp": '"$(date +"%s")"'
+  }' #| jq > /dev/null
+# "timestamp": 1660660000
+echo ""
+
+echo "push sma probanden logData (kW)"
+echo ""
+
+./probanden.test
+
+echo "push rheinenergie logData (kW)"
+
+for j in {1..6}
+do
+  POW="$(shuf -i 0-2 -n 1)"
+  WERT="$(bc <<< -2^$POW)$(shuf -i 20-80 -n 1).000"
+  # WERT="$((-1**$POW))*$(shuf -i 20-80 -n 1).000"
+
+  curl -s -X 'POST' \
+  'https://ubt.indeed-energy.de/rheinenergie/logData' \
+  -H 'accept: */*' \
+  -H "api_key: ${API_KEY}" \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "Station-ID": "ZE0'$j' AG06",
+        "Bezeichnung": "4",
+        "Wert": '$WERT',
+        "Zeitstempel": '"$(date +"%s")"'
+      }' #| jq > /dev/null
+  echo ""
+
+  curl -s -X 'POST' \
+  'https://ubt.indeed-energy.de/rheinenergie/logData' \
+  -H 'accept: */*' \
+  -H "api_key: ${API_KEY}" \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "Station-ID": "ZE0'$j' AG06",
+        "Bezeichnung": "8",
+        "Wert": '$WERT',
+        "Zeitstempel": '"$(date +"%s")"'
+      }' #| jq > /dev/null
+  echo ""
+
+  # curl -s -X 'POST' \
+  # 'https://ubt.indeed-energy.de/rheinenergie/logData' \
+  # -H 'accept: */*' \
+  # -H "api_key: ${API_KEY}" \
+  # -H 'Content-Type: application/json' \
+  # -d '{
+  #       "Station-ID": "ZE0'$j' AG06",
+  #       "Bezeichnung": "12",
+  #       "Wert": '$WERT',
+  #       "Zeitstempel": '"$(date +"%s")"'
+  #     }' #| jq > /dev/null
+
+done
+echo ""
+
+echo "push ffe logData (kWh)"
+
+CONSUMED=$(shuf -i 1-5 -n 1)
+echo "Consumed $CONSUMED kWh"
+curl -s -X 'POST' \
+'https://ubt.indeed-energy.de/ffe/logData' \
+-H 'accept: */*' \
+-H "api_key: ${API_KEY}" \
+-H 'Content-Type: application/json' \
+-d '{
+      "consumedPower": '$CONSUMED',
+      "ownerPubKey_x": "FfE",
+      "role": "Consumer",
+      "epoch": '"$(date +"%s")"'
+    }' #| jq > /dev/null
+
+echo ""
+
+echo "push schweiger logData (EWS1, ..., EWS5) (kWh)"
+
+for i in {1..5}
+do
+    echo "$i ->"
+    curl -s -X 'POST' \
+    'https://ubt.indeed-energy.de/schweiger/logData' \
+    -H 'accept: */*' \
+    -H "api_key: ${API_KEY}" \
+    -H 'Content-Type: application/json' \
+    -d '{
+            "energy_kWh": '"$((i*30))"',
+            "ownerPubKey_x": "EWS'$i'",
+            "role": "Producer",
+            "epoch": '"$(date +"%s")"'
+        }'
+    echo ""
+done
+echo "push schweiger logData (EWS_Gewerbe_1/2) (kWh)"
+for i in {1..2}
+do
+    echo "$i ->"
+    curl -s -X 'POST' \
+    'https://ubt.indeed-energy.de/schweiger/logData' \
+    -H 'accept: */*' \
+    -H "api_key: ${API_KEY}" \
+    -H 'Content-Type: application/json' \
+    -d '{
+            "energy_kWh": '"$((i*10))"',
+            "ownerPubKey_x": "EWS_Gewerbe_'$i'",
+            "role": "Consumer",
+            "epoch": '"$(date +"%s")"'
+        }'
+    echo ""
+done
+echo ""

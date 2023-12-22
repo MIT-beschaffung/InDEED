@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+echo "Sending data"
+curl -X 'POST' \
+  'http://localhost:8106/consumerfrontend/vzpush' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+"data": [{
+"uuid": 0,
+"tuples": [ [ '"$(date '+%s%M'0)"', 120 ] ]
+}]
+}'

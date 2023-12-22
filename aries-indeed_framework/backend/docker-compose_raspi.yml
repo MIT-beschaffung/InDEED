@@ -1,0 +1,50 @@
+version: "3"
+services:
+
+  consumer:
+    image: ubtindeed/nestjs-backend-arm64
+    build:
+      context: ../.
+      dockerfile: ./backend/Dockerfile_raspi
+    container_name: nestjs-consumer
+    platform: linux/arm64
+    ports:
+      - 8106:8106
+    environment:
+      - NAME=CONSUMER1
+      - ROLE=CONSUMER
+      - SOCKET_ENDPOINT_URL=0.0.0.0
+      - SOCKET_ENDPOINT_PORT=8106
+      - LOCAL_DB_URI=mongodb://dbconsumer:27018/raspi
+      - API_KEY=${API_KEY}
+    command:
+      npm run start:dev
+    # tail -f /dev/null
+    volumes:
+      - /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static
+      - /var/log/indeed:/var/log/indeed
+      - ./src:/usr/src/app/src
+      # sync time with host:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - "dbconsumer"
+      # - /usr/src/app/node_modules
+    networks:
+      indeed-network:
+
+  dbconsumer:
+    container_name: dbconsumer
+    image: mongo:4.2.16
+    platform: linux/arm64
+    command: mongod --port 27018
+    # ports:
+      # - 27018:27018
+    volumes:
+      - /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static
+    networks:
+      indeed-network:
+
+networks:
+  indeed-network:
+    name: indeed-network

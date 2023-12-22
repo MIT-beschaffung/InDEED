@@ -1,0 +1,81 @@
+
+<div id = "content" class="container">
+<div>
+  <div  class = "mt-5">
+   </div>
+    <P>Get logged Data here:</P>
+    <input #searchBox class = "form-control test" (input)="this.text=searchBox.value" type="text" placeholder="Enter your ID here" aria-label="Enter your ID here" aria-describedby="basic-addon1">
+  </div>
+
+  <div class = "mt-3">
+    <button type="button" class="btn btn-dark" (click)="onSubmit()">Search</button> 
+</div>
+
+
+  <div >
+      <div  class = "mt-5">
+     
+      </div>
+      <p>Get aggregated Data here:</p>
+      <input #searchBoxAggregate class = "form-control test" (input)="this.textAggregate=searchBoxAggregate.value" type="text" placeholder="Enter your ID here" aria-label="Enter your ID here" aria-describedby="basic-addon1">
+    </div>
+  
+    <div class = "mt-3">
+      <button type="button" class="btn btn-dark" (click)="onSubmitAggregate()">Search</button> 
+  </div>
+
+  
+    <div >
+        <div  class = "mt-5">
+       
+        </div>
+        <P>Get notarized Data here:</P>
+        <input #searchBoxNotarize class = "form-control test" (input)="this.textNotarize=searchBoxNotarize.value" type="text" placeholder="Enter your ID here" aria-label="Enter your ID here" aria-describedby="basic-addon1">
+      </div>
+    
+      <div class = "mt-3">
+        <button type="button" class="btn btn-dark" (click)="onSubmitNotarize()">Search</button> 
+    </div>
+
+<div *ngIf="message" class = "mt-3">
+  <div class="alert alert-success" role="alert">
+      {{message}}
+    </div>
+</div>    
+
+<div *ngIf="errormessage" class = "mt-3">
+<div class="alert alert-danger" role="alert">
+    {{errormessage}}
+  </div>
+</div>   
+
+<div *ngIf="proof">
+  <div class="card">
+    <div class="card-header">
+      Logdata
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><span class="text-muted">ID</span> {{ proof._id }}</li>
+      <li class="list-group-item"><span class="text-muted">Timestamp</span> {{ formatEpoch(proof.timestampNumber) }}</li>
+      <li class="list-group-item"><span class="text-muted">Hashed Log Data</span> {{ proof.hashedLogData }}</li>
+    </ul>
+  </div>
+  
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Key</th>
+        <th scope="col">Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of proof.logData | keyvalue">
+        <td>{{ item.key }}</td>
+        <td *ngIf="item.key != 'epoch_utc'">{{ item.value }}</td>
+        <td *ngIf="item.key == 'epoch_utc'">{{ formatEpochMillis(item.value) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>

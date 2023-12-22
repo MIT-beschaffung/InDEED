@@ -1,0 +1,25 @@
+.leaflet-container {
+    width: 95%;
+    height: 95%;
+    margin: 30px;
+}
+
+.marker {
+    width: 200px;
+}
+
+.button {
+    border-color: #23272a;
+    background: #d5eadb;
+    font-size: 14px;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    width: 210px;
+    height: 30px;
+    max-width: 15%;
+    max-height: 50%;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
